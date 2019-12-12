@@ -1,0 +1,10 @@
+#!/bin/rc
+# capture screen, 10 frames per second
+
+rfork e
+fn msec { awk '{ print int($2/1e8) }' </dev/time }
+while (timestamp=`{ msec }) {
+	toppm -r /dev/screen | ppm -c >$timestamp
+	while (test `{ msec } '=' $timestamp)
+		sleep 0.01
+}
